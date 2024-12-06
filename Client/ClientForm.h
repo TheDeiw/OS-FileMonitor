@@ -34,6 +34,8 @@ namespace Client {
 				delete components;
 			}
 		}
+	private: System::Windows::Forms::Button^ button1;
+	protected:
 
 	private:
 		/// <summary>
@@ -48,11 +50,30 @@ namespace Client {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->components = gcnew System::ComponentModel::Container();
-			this->Size = System::Drawing::Size(300,300);
-			this->Text = L"ClientForm";
-			this->Padding = System::Windows::Forms::Padding(0);
+			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->SuspendLayout();
+			// 
+			// button1
+			// 
+			this->button1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->button1->Location = System::Drawing::Point(89, 73);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(307, 124);
+			this->button1->TabIndex = 0;
+			this->button1->Text = L"Test Button";
+			this->button1->UseVisualStyleBackColor = true;
+			// 
+			// ClientForm
+			// 
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->ClientSize = System::Drawing::Size(488, 309);
+			this->Controls->Add(this->button1);
+			this->Name = L"ClientForm";
+			this->Text = L"ClientForm";
+			this->ResumeLayout(false);
+
 		}
 #pragma endregion
 	};
