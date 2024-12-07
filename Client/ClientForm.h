@@ -63,6 +63,7 @@ namespace Client {
 			this->button1->TabIndex = 0;
 			this->button1->Text = L"Test Button";
 			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &ClientForm::button1_Click);
 			// 
 			// ClientForm
 			// 
@@ -76,5 +77,6 @@ namespace Client {
 
 		}
 #pragma endregion
+	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e);
 	};
 }
