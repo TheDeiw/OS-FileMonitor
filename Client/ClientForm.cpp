@@ -75,7 +75,7 @@ std::string convertExtInput(const std::string& input) {
     return result;
 }
 
-System::Void Client::ClientForm::button1_Click(System::Object^ sender, System::EventArgs^ e) {
+System::Void Client::ClientForm::showButton_Click(System::Object^ sender, System::EventArgs^ e) {
     // TEMP Setting UTF-8
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
@@ -138,6 +138,7 @@ System::Void Client::ClientForm::button1_Click(System::Object^ sender, System::E
     auto rows = split(response, '\n');
 
     fileTable->Rows->Clear();
+    int rowIndex;
 
     for (const auto& row : rows) {
         auto fields = split(row, '|');
@@ -147,11 +148,14 @@ System::Void Client::ClientForm::button1_Click(System::Object^ sender, System::E
                 << ", Creation Date: " << fields[2] << std::endl;
             if (fields[1] == " ")
             {
-                fileTable->Rows->Add(
+                rowIndex = fileTable->Rows->Add(
                     gcnew System::String(fields[0].c_str()),
                     gcnew System::String(fields[1].c_str()),
                     gcnew System::String(fields[2].c_str())
                 );
+
+                fileTable->Rows[rowIndex]->DefaultCellStyle->Font = gcnew System::Drawing::Font(fileTable->Font, System::Drawing::FontStyle::Bold);
+                fileTable->Rows[rowIndex]->DefaultCellStyle->BackColor = System::Drawing::Color::LightBlue;
             }
             else
             {
