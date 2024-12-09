@@ -96,10 +96,9 @@ namespace Client {
 			this->showButton->BackColor = System::Drawing::Color::Silver;
 			this->showButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->showButton->Location = System::Drawing::Point(88, 461);
-			this->showButton->Margin = System::Windows::Forms::Padding(3, 4, 3, 4);
+			this->showButton->Location = System::Drawing::Point(78, 369);
 			this->showButton->Name = L"showButton";
-			this->showButton->Size = System::Drawing::Size(241, 58);
+			this->showButton->Size = System::Drawing::Size(214, 46);
 			this->showButton->TabIndex = 0;
 			this->showButton->Text = L"Show";
 			this->showButton->UseVisualStyleBackColor = false;
@@ -107,20 +106,18 @@ namespace Client {
 			// 
 			// textBoxDir
 			// 
-			this->textBoxDir->Location = System::Drawing::Point(12, 46);
-			this->textBoxDir->Margin = System::Windows::Forms::Padding(3, 4, 3, 4);
+			this->textBoxDir->Location = System::Drawing::Point(11, 37);
 			this->textBoxDir->Multiline = true;
 			this->textBoxDir->Name = L"textBoxDir";
 			this->textBoxDir->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
-			this->textBoxDir->Size = System::Drawing::Size(379, 164);
+			this->textBoxDir->Size = System::Drawing::Size(337, 132);
 			this->textBoxDir->TabIndex = 2;
 			// 
 			// textBoxExtension
 			// 
-			this->textBoxExtension->Location = System::Drawing::Point(12, 331);
-			this->textBoxExtension->Margin = System::Windows::Forms::Padding(3, 4, 3, 4);
+			this->textBoxExtension->Location = System::Drawing::Point(11, 265);
 			this->textBoxExtension->Name = L"textBoxExtension";
-			this->textBoxExtension->Size = System::Drawing::Size(379, 26);
+			this->textBoxExtension->Size = System::Drawing::Size(337, 22);
 			this->textBoxExtension->TabIndex = 3;
 			// 
 			// fileTable
@@ -132,7 +129,7 @@ namespace Client {
 				this->name, this->size,
 					this->date
 			});
-			this->fileTable->Location = System::Drawing::Point(14, 14);
+			this->fileTable->Location = System::Drawing::Point(12, 11);
 			this->fileTable->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->fileTable->Name = L"fileTable";
 			this->fileTable->ReadOnly = true;
@@ -140,7 +137,7 @@ namespace Client {
 			this->fileTable->RowHeadersWidth = 62;
 			this->fileTable->RowTemplate->Height = 28;
 			this->fileTable->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
-			this->fileTable->Size = System::Drawing::Size(878, 564);
+			this->fileTable->Size = System::Drawing::Size(780, 451);
 			this->fileTable->TabIndex = 1;
 			// 
 			// name
@@ -175,9 +172,9 @@ namespace Client {
 			this->label1->AutoSize = true;
 			this->label1->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 10.2F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label1->Location = System::Drawing::Point(8, 14);
+			this->label1->Location = System::Drawing::Point(7, 11);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(388, 30);
+			this->label1->Size = System::Drawing::Size(311, 23);
 			this->label1->TabIndex = 4;
 			this->label1->Text = L"Directory Paths (write in different lines)";
 			// 
@@ -192,10 +189,10 @@ namespace Client {
 			this->panel1->Controls->Add(this->label1);
 			this->panel1->Controls->Add(this->showButton);
 			this->panel1->Controls->Add(this->textBoxExtension);
-			this->panel1->Location = System::Drawing::Point(900, 14);
+			this->panel1->Location = System::Drawing::Point(800, 11);
 			this->panel1->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(403, 564);
+			this->panel1->Size = System::Drawing::Size(358, 451);
 			this->panel1->TabIndex = 5;
 			// 
 			// label5
@@ -204,9 +201,9 @@ namespace Client {
 			this->label5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->label5->ForeColor = System::Drawing::SystemColors::ControlDarkDark;
-			this->label5->Location = System::Drawing::Point(10, 361);
+			this->label5->Location = System::Drawing::Point(9, 289);
 			this->label5->Name = L"label5";
-			this->label5->Size = System::Drawing::Size(355, 20);
+			this->label5->Size = System::Drawing::Size(303, 16);
 			this->label5->TabIndex = 8;
 			this->label5->Text = L"If you want to monitor all files - leave empty";
 			// 
@@ -214,9 +211,9 @@ namespace Client {
 			// 
 			this->label4->AutoSize = true;
 			this->label4->ForeColor = System::Drawing::SystemColors::ControlDarkDark;
-			this->label4->Location = System::Drawing::Point(10, 381);
+			this->label4->Location = System::Drawing::Point(9, 305);
 			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(150, 20);
+			this->label4->Size = System::Drawing::Size(125, 16);
 			this->label4->TabIndex = 7;
 			this->label4->Text = L"Example: txt bin doc";
 			// 
@@ -224,9 +221,9 @@ namespace Client {
 			// 
 			this->label3->AutoSize = true;
 			this->label3->ForeColor = System::Drawing::SystemColors::ControlDarkDark;
-			this->label3->Location = System::Drawing::Point(10, 215);
+			this->label3->Location = System::Drawing::Point(9, 172);
 			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(208, 40);
+			this->label3->Size = System::Drawing::Size(169, 32);
 			this->label3->TabIndex = 6;
 			this->label3->Text = L"Example: C:\\User\\Folder1 \r\n                   \"C:\\User\\Folder2\"";
 			// 
@@ -235,22 +232,21 @@ namespace Client {
 			this->label2->AutoSize = true;
 			this->label2->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 10.2F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label2->Location = System::Drawing::Point(9, 300);
+			this->label2->Location = System::Drawing::Point(8, 240);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(304, 30);
+			this->label2->Size = System::Drawing::Size(243, 23);
 			this->label2->TabIndex = 5;
 			this->label2->Text = L"Extensions (divided by spaces)";
 			// 
 			// ClientForm
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(9, 20);
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::SlateGray;
-			this->ClientSize = System::Drawing::Size(1316, 594);
+			this->ClientSize = System::Drawing::Size(1170, 475);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->fileTable);
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
-			this->Margin = System::Windows::Forms::Padding(3, 4, 3, 4);
 			this->Name = L"ClientForm";
 			this->Text = L"FileMonitor";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->fileTable))->EndInit();
