@@ -174,7 +174,7 @@ namespace Client {
 				static_cast<System::Byte>(204)));
 			this->label1->Location = System::Drawing::Point(7, 11);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(310, 23);
+			this->label1->Size = System::Drawing::Size(311, 23);
 			this->label1->TabIndex = 4;
 			this->label1->Text = L"Directory Paths (write in different lines)";
 			// 
@@ -232,7 +232,7 @@ namespace Client {
 			this->label2->AutoSize = true;
 			this->label2->Font = (gcnew System::Drawing::Font(L"Yu Gothic UI", 10.2F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label2->Location = System::Drawing::Point(8, 242);
+			this->label2->Location = System::Drawing::Point(8, 240);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(243, 23);
 			this->label2->TabIndex = 5;

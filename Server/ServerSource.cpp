@@ -92,7 +92,7 @@ std::string searchFiles(const std::vector<std::string>& directories, const std::
                     std::string creationTime = GetFileCreationTime(wFilePath);
 
                     result << entry.path().filename().string() << "|"
-                        << fs::file_size(entry.path()) << "|" << creationTime << "\n";
+                        << fs::file_size(entry.path()) / 1024 << "|" << creationTime << "\n";
                 }
             }
         }
