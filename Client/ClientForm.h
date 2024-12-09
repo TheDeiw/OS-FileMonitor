@@ -35,7 +35,8 @@ namespace Client {
 			}
 		}
 	private: System::Windows::Forms::Button^ button1;
-	private: System::Windows::Forms::DataGridView^ dataGridView1;
+	private: System::Windows::Forms::DataGridView^ fileTable;
+
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ name;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ size;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ date;
@@ -65,7 +66,7 @@ namespace Client {
 		{
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(ClientForm::typeid));
 			this->button1 = (gcnew System::Windows::Forms::Button());
-			this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
+			this->fileTable = (gcnew System::Windows::Forms::DataGridView());
 			this->name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->size = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->date = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
@@ -74,7 +75,7 @@ namespace Client {
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->label2 = (gcnew System::Windows::Forms::Label());
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->fileTable))->BeginInit();
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -83,31 +84,31 @@ namespace Client {
 			this->button1->BackColor = System::Drawing::Color::Silver;
 			this->button1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->button1->Location = System::Drawing::Point(84, 487);
-			this->button1->Margin = System::Windows::Forms::Padding(3, 4, 3, 4);
+			this->button1->Location = System::Drawing::Point(75, 390);
 			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(241, 58);
+			this->button1->Size = System::Drawing::Size(214, 46);
 			this->button1->TabIndex = 0;
 			this->button1->Text = L"Test Button";
 			this->button1->UseVisualStyleBackColor = false;
 			this->button1->Click += gcnew System::EventHandler(this, &ClientForm::button1_Click);
 			// 
-			// dataGridView1
+			// fileTable
 			// 
-			this->dataGridView1->AllowUserToAddRows = false;
-			this->dataGridView1->AllowUserToDeleteRows = false;
-			this->dataGridView1->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->dataGridView1->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {
+			this->fileTable->AllowUserToAddRows = false;
+			this->fileTable->AllowUserToDeleteRows = false;
+			this->fileTable->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			this->fileTable->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {
 				this->name, this->size,
 					this->date
 			});
-			this->dataGridView1->Location = System::Drawing::Point(10, 30);
-			this->dataGridView1->Name = L"dataGridView1";
-			this->dataGridView1->ReadOnly = true;
-			this->dataGridView1->RowHeadersWidth = 62;
-			this->dataGridView1->RowTemplate->Height = 28;
-			this->dataGridView1->Size = System::Drawing::Size(564, 564);
-			this->dataGridView1->TabIndex = 1;
+			this->fileTable->Location = System::Drawing::Point(9, 24);
+			this->fileTable->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
+			this->fileTable->Name = L"fileTable";
+			this->fileTable->ReadOnly = true;
+			this->fileTable->RowHeadersWidth = 62;
+			this->fileTable->RowTemplate->Height = 28;
+			this->fileTable->Size = System::Drawing::Size(501, 451);
+			this->fileTable->TabIndex = 1;
 			// 
 			// name
 			// 
@@ -135,25 +136,27 @@ namespace Client {
 			// 
 			// textBox1
 			// 
-			this->textBox1->Location = System::Drawing::Point(12, 46);
+			this->textBox1->Location = System::Drawing::Point(11, 37);
+			this->textBox1->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->textBox1->Multiline = true;
 			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(379, 37);
+			this->textBox1->Size = System::Drawing::Size(337, 30);
 			this->textBox1->TabIndex = 2;
 			// 
 			// textBox2
 			// 
-			this->textBox2->Location = System::Drawing::Point(12, 148);
+			this->textBox2->Location = System::Drawing::Point(11, 118);
+			this->textBox2->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(379, 26);
+			this->textBox2->Size = System::Drawing::Size(337, 22);
 			this->textBox2->TabIndex = 3;
 			// 
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(8, 23);
+			this->label1->Location = System::Drawing::Point(7, 18);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(279, 20);
+			this->label1->Size = System::Drawing::Size(230, 16);
 			this->label1->TabIndex = 4;
 			this->label1->Text = L"Directory Paths (write in different lines)";
 			// 
@@ -165,33 +168,33 @@ namespace Client {
 			this->panel1->Controls->Add(this->label1);
 			this->panel1->Controls->Add(this->button1);
 			this->panel1->Controls->Add(this->textBox2);
-			this->panel1->Location = System::Drawing::Point(593, 30);
+			this->panel1->Location = System::Drawing::Point(527, 24);
+			this->panel1->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(403, 564);
+			this->panel1->Size = System::Drawing::Size(358, 451);
 			this->panel1->TabIndex = 5;
 			// 
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(8, 125);
+			this->label2->Location = System::Drawing::Point(7, 100);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(231, 20);
+			this->label2->Size = System::Drawing::Size(197, 16);
 			this->label2->TabIndex = 5;
 			this->label2->Text = L"Extentions (divided by commas)";
 			// 
 			// ClientForm
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(9, 20);
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::SlateGray;
-			this->ClientSize = System::Drawing::Size(1008, 623);
+			this->ClientSize = System::Drawing::Size(896, 498);
 			this->Controls->Add(this->panel1);
-			this->Controls->Add(this->dataGridView1);
+			this->Controls->Add(this->fileTable);
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
-			this->Margin = System::Windows::Forms::Padding(3, 4, 3, 4);
 			this->Name = L"ClientForm";
-			this->Text = L"ClientForm";
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->EndInit();
+			this->Text = L"c";
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->fileTable))->EndInit();
 			this->panel1->ResumeLayout(false);
 			this->panel1->PerformLayout();
 			this->ResumeLayout(false);

@@ -45,7 +45,8 @@ System::Void Client::ClientForm::button1_Click(System::Object^ sender, System::E
     connect(clientSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
 
     // Forming a request
-    std::string directories = "D:\\6. University\\2 Semestr\\«в≥ти_2sem,D:\\6. University\\1 Semestr\\«в≥ти";
+    //std::string directories = "D:\\6. University\\2 Semestr\\«в≥ти_2sem,D:\\6. University\\1 Semestr\\«в≥ти";
+    std::string directories = "D:\\”н≥верситет\\2 ”–—\\ќ—,D:\\”н≥верситет\\јнгл≥йська мова";
     std::string extensions = "txt,pdf";
     std::string request = directories + ";" + extensions;
 
@@ -62,6 +63,11 @@ System::Void Client::ClientForm::button1_Click(System::Object^ sender, System::E
             std::cout << "Filename: " << fields[0]
                 << ", Size: " << fields[1]
                 << ", Creation Date: " << fields[2] << std::endl;
+            fileTable->Rows->Add(
+                gcnew System::String(fields[0].c_str()),  
+                gcnew System::String((fields[1] + " kb").c_str()),
+                gcnew System::String(fields[2].c_str())
+            );
         }
     }
     //std::cout << "Response from server: " << buffer << std::endl;
