@@ -120,7 +120,7 @@ int main() {
     serverAddr.sin_port = htons(8080);
     serverAddr.sin_addr.s_addr = INADDR_ANY;
 
-    // Binding and listening
+    // Binding and listeningg
     bind(serverSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
     listen(serverSocket, 3);
 
@@ -142,7 +142,7 @@ int main() {
         // Request processing
         auto parts = split(request, ';');
         if (parts.size() == 2) {
-            auto directories = split(parts[0], ',');
+            auto directories = split(parts[0], '|');
             auto extensions = split(parts[1], ',');
 
             // Search files

@@ -50,14 +50,18 @@ bool hasOnlyAlphanumeric(const std::string& extensions) {
 
 std::string convertDirInput(std::string& input) {
     input.erase(std::remove(input.begin(), input.end(), '\"'), input.end());
-    // Step 1: Remove leading and trailing whitespace
+    // Step 1: Trim leading and trailing whitespace
     auto start = input.find_first_not_of(" \t\n\r");
     auto end = input.find_last_not_of(" \t\n\r");
     std::string trimmed = (start == std::string::npos) ? "" : input.substr(start, end - start + 1);
 
-    // Step 2: Replace all whitespace sequences with a comma
-    std::regex whitespaceRegex("\\s+");
-    std::string result = std::regex_replace(trimmed, whitespaceRegex, ",");
+    // Step 2: Replace multiple newlines with a pipe
+    std::regex newlineRegex("[\n\r]+");
+    std::string withoutNewlines = std::regex_replace(trimmed, newlineRegex, "|");
+
+    // Step 3: Ensure no extra spaces are around the pipe
+    std::regex extraSpaceRegex("[ ]+\\|+|\\|+[ ]+");
+    std::string result = std::regex_replace(withoutNewlines, extraSpaceRegex, "|");
 
     return result;
 }
@@ -68,7 +72,7 @@ std::string convertExtInput(const std::string& input) {
     auto end = input.find_last_not_of(" \t\n\r");
     std::string trimmed = (start == std::string::npos) ? "" : input.substr(start, end - start + 1);
 
-    // Step 2: Replace multiple spaces with a single comma
+    // Step 2: Replace all whitespace sequences with a comma
     std::regex whitespaceRegex("\\s+");
     std::string result = std::regex_replace(trimmed, whitespaceRegex, ",");
 
@@ -125,7 +129,7 @@ System::Void Client::ClientForm::button1_Click(System::Object^ sender, System::E
         WSACleanup();
         return;
     }
-    std::string extensions = convertDirInput(inputExt);
+    std::string extensions = convertExtInput(inputExt);
   
     std::string request = directories + ";" + extensions;
 
