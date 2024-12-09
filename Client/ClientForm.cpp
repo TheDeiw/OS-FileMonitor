@@ -45,9 +45,10 @@ System::Void Client::ClientForm::button1_Click(System::Object^ sender, System::E
     connect(clientSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
 
     // Forming a request
-    //std::string directories = "D:\\6. University\\2 Semestr\\«в≥ти_2sem,D:\\6. University\\1 Semestr\\«в≥ти";
-    std::string directories = "D:\\”н≥верситет\\2 ”–—\\ќ—,D:\\”н≥верситет\\јнгл≥йська мова";
-    std::string extensions = "txt,pdf";
+    std::string directories = "D:\\6. University\\2 Semestr\\«в≥ти_2sem,D:\\6. University\\1 Semestr\\«в≥ти";
+    //std::string directories = "D:\\”н≥верситет\\2 ”–—\\ќ—,D:\\”н≥верситет\\јнгл≥йська мова";
+    //std::string extensions = "txt,pdf";
+    std::string extensions = "";
     std::string request = directories + ";" + extensions;
 
     // Sending a request

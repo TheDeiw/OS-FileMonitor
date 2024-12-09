@@ -37,14 +37,17 @@ namespace Client {
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::DataGridView^ fileTable;
 
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ name;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ size;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ date;
+
+
+
 	private: System::Windows::Forms::TextBox^ textBox1;
 	private: System::Windows::Forms::TextBox^ textBox2;
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Panel^ panel1;
 	private: System::Windows::Forms::Label^ label2;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ name;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ size;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ date;
 
 
 
@@ -67,14 +70,14 @@ namespace Client {
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(ClientForm::typeid));
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->fileTable = (gcnew System::Windows::Forms::DataGridView());
-			this->name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->size = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->date = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->size = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->date = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->fileTable))->BeginInit();
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
@@ -107,32 +110,8 @@ namespace Client {
 			this->fileTable->ReadOnly = true;
 			this->fileTable->RowHeadersWidth = 62;
 			this->fileTable->RowTemplate->Height = 28;
-			this->fileTable->Size = System::Drawing::Size(501, 451);
+			this->fileTable->Size = System::Drawing::Size(779, 696);
 			this->fileTable->TabIndex = 1;
-			// 
-			// name
-			// 
-			this->name->HeaderText = L"Name";
-			this->name->MinimumWidth = 8;
-			this->name->Name = L"name";
-			this->name->ReadOnly = true;
-			this->name->Width = 150;
-			// 
-			// size
-			// 
-			this->size->HeaderText = L"Size";
-			this->size->MinimumWidth = 8;
-			this->size->Name = L"size";
-			this->size->ReadOnly = true;
-			this->size->Width = 150;
-			// 
-			// date
-			// 
-			this->date->HeaderText = L"Creation date";
-			this->date->MinimumWidth = 8;
-			this->date->Name = L"date";
-			this->date->ReadOnly = true;
-			this->date->Width = 150;
 			// 
 			// textBox1
 			// 
@@ -168,7 +147,7 @@ namespace Client {
 			this->panel1->Controls->Add(this->label1);
 			this->panel1->Controls->Add(this->button1);
 			this->panel1->Controls->Add(this->textBox2);
-			this->panel1->Location = System::Drawing::Point(527, 24);
+			this->panel1->Location = System::Drawing::Point(803, 24);
 			this->panel1->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(358, 451);
@@ -183,12 +162,39 @@ namespace Client {
 			this->label2->TabIndex = 5;
 			this->label2->Text = L"Extentions (divided by commas)";
 			// 
+			// name
+			// 
+			this->name->HeaderText = L"Name";
+			this->name->MinimumWidth = 8;
+			this->name->Name = L"name";
+			this->name->ReadOnly = true;
+			this->name->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::NotSortable;
+			this->name->Width = 150;
+			// 
+			// size
+			// 
+			this->size->HeaderText = L"Size";
+			this->size->MinimumWidth = 8;
+			this->size->Name = L"size";
+			this->size->ReadOnly = true;
+			this->size->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::NotSortable;
+			this->size->Width = 150;
+			// 
+			// date
+			// 
+			this->date->HeaderText = L"Creation date";
+			this->date->MinimumWidth = 8;
+			this->date->Name = L"date";
+			this->date->ReadOnly = true;
+			this->date->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::NotSortable;
+			this->date->Width = 150;
+			// 
 			// ClientForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::SlateGray;
-			this->ClientSize = System::Drawing::Size(896, 498);
+			this->ClientSize = System::Drawing::Size(1173, 731);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->fileTable);
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
