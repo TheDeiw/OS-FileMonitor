@@ -5,6 +5,11 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <msclr/marshal_cppstd.h>
+#include <sstream>
+#include <algorithm>
+#include <cctype>
+#include <regex>
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -17,6 +22,57 @@ std::vector<std::string> split(const std::string& str, char delimiter) {
         tokens.push_back(token);
     }
     return tokens;
+}
+
+bool checkDir(std::string& input) {
+    const char forbiddenChars[] = {'<', '>', '|', '?', '*'};
+
+    // Check each character in the string
+    for (char ch : input) {
+        for (char forbidden : forbiddenChars) {
+            if (ch == forbidden) {
+                return false; // If a forbidden character is found, return false
+            }
+        }
+    }
+
+    return true; // No forbidden characters found
+}
+
+bool hasOnlyAlphanumeric(const std::string& extensions) {
+    for (char ch : extensions) {
+        if (!std::isalnum(static_cast<unsigned char>(ch))&&ch!=' ') {
+            return false; // Non-alphanumeric character found
+        }
+    }
+    return true; // All characters are alphanumeric
+}
+
+std::string convertDirInput(std::string& input) {
+    input.erase(std::remove(input.begin(), input.end(), '\"'), input.end());
+    // Step 1: Remove leading and trailing whitespace
+    auto start = input.find_first_not_of(" \t\n\r");
+    auto end = input.find_last_not_of(" \t\n\r");
+    std::string trimmed = (start == std::string::npos) ? "" : input.substr(start, end - start + 1);
+
+    // Step 2: Replace all whitespace sequences with a comma
+    std::regex whitespaceRegex("\\s+");
+    std::string result = std::regex_replace(trimmed, whitespaceRegex, ",");
+
+    return result;
+}
+
+std::string convertExtInput(const std::string& input) {
+    // Step 1: Remove leading and trailing whitespace
+    auto start = input.find_first_not_of(" \t\n\r");
+    auto end = input.find_last_not_of(" \t\n\r");
+    std::string trimmed = (start == std::string::npos) ? "" : input.substr(start, end - start + 1);
+
+    // Step 2: Replace multiple spaces with a single comma
+    std::regex whitespaceRegex("\\s+");
+    std::string result = std::regex_replace(trimmed, whitespaceRegex, ",");
+
+    return result;
 }
 
 System::Void Client::ClientForm::button1_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -45,10 +101,32 @@ System::Void Client::ClientForm::button1_Click(System::Object^ sender, System::E
     connect(clientSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
 
     // Forming a request
-    std::string directories = "D:\\6. University\\2 Semestr\\«в≥ти_2sem,D:\\6. University\\1 Semestr\\«в≥ти";
-    //std::string directories = "D:\\”н≥верситет\\2 ”–—\\ќ—,D:\\”н≥верситет\\јнгл≥йська мова";
+
+    std::string inputDir = msclr::interop::marshal_as<std::string>(textBoxDir->Text);
+    if (!checkDir(inputDir)) {
+        MessageBox::Show("Path is invalid. Can't use '<', '>', '|', '?', '*'", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+        closesocket(clientSocket);
+        WSACleanup();
+        return;
+    }
+    std::string directories = convertDirInput(inputDir);
+    if (directories.empty()) {
+        MessageBox::Show("Please enter the path.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+        closesocket(clientSocket);
+        WSACleanup();
+        return;
+    }
+
     //std::string extensions = "txt,pdf";
-    std::string extensions = "";
+    std::string inputExt = msclr::interop::marshal_as<std::string>(textBoxExtension->Text);
+    if (!hasOnlyAlphanumeric(inputExt)) {
+        MessageBox::Show("Extensions are invalid. Only Latin characters and numbers are allowed", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+        closesocket(clientSocket);
+        WSACleanup();
+        return;
+    }
+    std::string extensions = convertDirInput(inputExt);
+  
     std::string request = directories + ";" + extensions;
 
     // Sending a request
@@ -86,6 +164,7 @@ System::Void Client::ClientForm::button1_Click(System::Object^ sender, System::E
         }
     }
     std::cout << "Response from server: " << buffer << std::endl;
+
 
     // Closing the socket
     closesocket(clientSocket);
