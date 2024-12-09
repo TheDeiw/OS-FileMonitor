@@ -101,6 +101,7 @@ System::Void Client::ClientForm::button1_Click(System::Object^ sender, System::E
     connect(clientSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
 
     // Forming a request
+
     std::string inputDir = msclr::interop::marshal_as<std::string>(textBoxDir->Text);
     if (!checkDir(inputDir)) {
         MessageBox::Show("Path is invalid. Can't use '<', '>', '|', '?', '*'", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
@@ -125,7 +126,7 @@ System::Void Client::ClientForm::button1_Click(System::Object^ sender, System::E
         return;
     }
     std::string extensions = convertDirInput(inputExt);
-    
+  
     std::string request = directories + ";" + extensions;
 
     // Sending a request
@@ -135,15 +136,35 @@ System::Void Client::ClientForm::button1_Click(System::Object^ sender, System::E
     recv(clientSocket, buffer, sizeof(buffer), 0);
     std::string response(buffer);
     auto rows = split(response, '\n');
+
+    fileTable->Rows->Clear();
+
     for (const auto& row : rows) {
         auto fields = split(row, '|');
         if (fields.size() == 3) {
             std::cout << "Filename: " << fields[0]
                 << ", Size: " << fields[1]
                 << ", Creation Date: " << fields[2] << std::endl;
+            if (fields[1] == " ")
+            {
+                fileTable->Rows->Add(
+                    gcnew System::String(fields[0].c_str()),
+                    gcnew System::String(fields[1].c_str()),
+                    gcnew System::String(fields[2].c_str())
+                );
+            }
+            else
+            {
+                fileTable->Rows->Add(
+                    gcnew System::String(fields[0].c_str()),
+                    gcnew System::String((fields[1] + " kb").c_str()),
+                    gcnew System::String(fields[2].c_str())
+                );
+            }
         }
-    }/**/
-    //std::cout << "Response from server: " << buffer << std::endl;
+    }
+    std::cout << "Response from server: " << buffer << std::endl;
+
 
     // Closing the socket
     closesocket(clientSocket);

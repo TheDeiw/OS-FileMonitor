@@ -13,6 +13,52 @@
 #pragma comment(lib, "ws2_32.lib")
 namespace fs = std::filesystem;
 
+// Function to get creation data of file
+std::string GetFileCreationTime(const std::wstring& filePath) {
+    HANDLE fileHandle = CreateFile(
+        filePath.c_str(),
+        GENERIC_READ,
+        FILE_SHARE_READ,
+        nullptr,
+        OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL,
+        nullptr
+    );
+
+    if (fileHandle == INVALID_HANDLE_VALUE) {
+        return "Unknown";
+    }
+
+    FILE_BASIC_INFO fileInfo;
+    if (GetFileInformationByHandleEx(fileHandle, FileBasicInfo, &fileInfo, sizeof(fileInfo))) {
+        // Перетворення CreationTime в FILETIME
+        FILETIME fileTime;
+        fileTime.dwLowDateTime = fileInfo.CreationTime.LowPart;
+        fileTime.dwHighDateTime = fileInfo.CreationTime.HighPart;
+
+        // Перетворення FILETIME в SYSTEMTIME
+        SYSTEMTIME creationTime;
+        FileTimeToSystemTime(&fileTime, &creationTime);
+
+        CloseHandle(fileHandle);
+
+        // Форматування дати
+        char buffer[20];
+        sprintf_s(buffer, "%04d-%02d-%02d %02d:%02d:%02d",
+            creationTime.wYear,
+            creationTime.wMonth,
+            creationTime.wDay,
+            creationTime.wHour,
+            creationTime.wMinute,
+            creationTime.wSecond);
+
+        return std::string(buffer);
+    }
+
+    CloseHandle(fileHandle);
+    return "Unknown";
+}
+
 // Function to split a string
 std::vector<std::string> split(const std::string& str, char delimiter) {
     std::vector<std::string> tokens;
@@ -30,7 +76,7 @@ std::string searchFiles(const std::vector<std::string>& directories, const std::
 
     // Search in each directory
     for (const auto& dir : directories) {
-
+        result << dir << "| | \n";
         // Make file iterator
         for (const auto& entry : fs::directory_iterator(dir)) {
 
@@ -42,15 +88,11 @@ std::string searchFiles(const std::vector<std::string>& directories, const std::
                 // Searching
                 if (std::find(extensions.begin(), extensions.end(), ext) != extensions.end()) {
 
-                    // Forming a line with file data
-                    result << entry.path().filename().string() << "|"
-                        << fs::file_size(entry.path()) << "|a\n";
+                    std::wstring wFilePath = entry.path().wstring();
+                    std::string creationTime = GetFileCreationTime(wFilePath);
 
-                    // TIME DOESN`T WORK
-                    //auto ftime = fs::last_write_time(entry.path());
-                    //auto sys_time = decltype(ftime)::clock::to_sys(ftime); // Перетворення в system_clock
-                    //std::time_t cftime = std::chrono::system_clock::to_time_t(sys_time); // Перетворення на time_t
-                    //result << std::ctime(&cftime); // Форматування часу як рядка
+                    result << entry.path().filename().string() << "|"
+                        << fs::file_size(entry.path()) << "|" << creationTime << "\n";
                 }
             }
         }
