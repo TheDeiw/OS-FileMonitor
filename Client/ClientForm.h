@@ -39,8 +39,11 @@ namespace Client {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ name;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ size;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ date;
-	private: System::Windows::Forms::TextBox^ textBox1;
-	private: System::Windows::Forms::TextBox^ textBox2;
+	private: System::Windows::Forms::TextBox^ textBoxDir;
+	private: System::Windows::Forms::TextBox^ textBoxExtension;
+
+
+
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Panel^ panel1;
 	private: System::Windows::Forms::Label^ label2;
@@ -69,8 +72,8 @@ namespace Client {
 			this->name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->size = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->date = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
+			this->textBoxDir = (gcnew System::Windows::Forms::TextBox());
+			this->textBoxExtension = (gcnew System::Windows::Forms::TextBox());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->label2 = (gcnew System::Windows::Forms::Label());
@@ -133,20 +136,21 @@ namespace Client {
 			this->date->ReadOnly = true;
 			this->date->Width = 150;
 			// 
-			// textBox1
+			// textBoxDir
 			// 
-			this->textBox1->Location = System::Drawing::Point(12, 46);
-			this->textBox1->Multiline = true;
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(379, 37);
-			this->textBox1->TabIndex = 2;
+			this->textBoxDir->Location = System::Drawing::Point(12, 46);
+			this->textBoxDir->Multiline = true;
+			this->textBoxDir->Name = L"textBoxDir";
+			this->textBoxDir->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
+			this->textBoxDir->Size = System::Drawing::Size(379, 58);
+			this->textBoxDir->TabIndex = 2;
 			// 
-			// textBox2
+			// textBoxExtension
 			// 
-			this->textBox2->Location = System::Drawing::Point(12, 148);
-			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(379, 26);
-			this->textBox2->TabIndex = 3;
+			this->textBoxExtension->Location = System::Drawing::Point(12, 148);
+			this->textBoxExtension->Name = L"textBoxExtension";
+			this->textBoxExtension->Size = System::Drawing::Size(379, 26);
+			this->textBoxExtension->TabIndex = 3;
 			// 
 			// label1
 			// 
@@ -161,10 +165,10 @@ namespace Client {
 			// 
 			this->panel1->BackColor = System::Drawing::SystemColors::Menu;
 			this->panel1->Controls->Add(this->label2);
-			this->panel1->Controls->Add(this->textBox1);
+			this->panel1->Controls->Add(this->textBoxDir);
 			this->panel1->Controls->Add(this->label1);
 			this->panel1->Controls->Add(this->button1);
-			this->panel1->Controls->Add(this->textBox2);
+			this->panel1->Controls->Add(this->textBoxExtension);
 			this->panel1->Location = System::Drawing::Point(593, 30);
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(403, 564);
@@ -175,9 +179,9 @@ namespace Client {
 			this->label2->AutoSize = true;
 			this->label2->Location = System::Drawing::Point(8, 125);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(231, 20);
+			this->label2->Size = System::Drawing::Size(225, 20);
 			this->label2->TabIndex = 5;
-			this->label2->Text = L"Extentions (divided by commas)";
+			this->label2->Text = L"Extensions (divided by spaces)";
 			// 
 			// ClientForm
 			// 

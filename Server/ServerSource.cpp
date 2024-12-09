@@ -92,6 +92,7 @@ int main() {
         }
 
         // Receiving the request
+        std::fill(std::begin(buffer), std::end(buffer), 0);
         recv(clientSocket, buffer, sizeof(buffer), 0);
         std::string request(buffer);
         std::cout << "Received request: " << request << std::endl;
