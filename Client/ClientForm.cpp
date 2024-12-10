@@ -138,12 +138,35 @@ System::Void Client::ClientForm::showButton_Click(System::Object^ sender, System
 
     // Getting a response
     recv(clientSocket, buffer, sizeof(buffer), 0);
+    
+    /*
+    while (buffer[0] == '1') {
+        std::string response(buffer);
+        response = response.substr(1);
+        System::String^ responseMessage = gcnew System::String(response.c_str());
+
+        MessageBox::Show(responseMessage, "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+        recv(clientSocket, buffer, sizeof(buffer), 0);
+    }*/
+
+    System::String^ responseMessage = gcnew System::String("");
+
+    while (buffer[0] == '1') {
+        std::string response(buffer);
+        response = response.substr(1);
+        responseMessage += gcnew System::String(response.c_str());
+        recv(clientSocket, buffer, sizeof(buffer), 0);
+    }
+    if (responseMessage != "") { // Only show the message if there was at least one '1'
+        MessageBox::Show(responseMessage, "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+    }
+
     std::string response(buffer);
+    response = response.substr(1);
     auto rows = split(response, '\n');
 
     fileTable->Rows->Clear();
     int rowIndex;
-    bool isError = false;
     for (const auto& row : rows) {
         auto fields = split(row, '|');
         if (fields.size() == 3) {
@@ -165,7 +188,6 @@ System::Void Client::ClientForm::showButton_Click(System::Object^ sender, System
                 else if (fields[0].substr(0, 2) == "ER") {
                     fileTable->Rows[rowIndex]->DefaultCellStyle->Font = gcnew System::Drawing::Font(fileTable->Font, System::Drawing::FontStyle::Bold);
                     fileTable->Rows[rowIndex]->DefaultCellStyle->BackColor = System::Drawing::Color::FromArgb(250, 160, 160);
-                    isError = true;
                 }
             }
             else
@@ -177,9 +199,6 @@ System::Void Client::ClientForm::showButton_Click(System::Object^ sender, System
                 );
             }
         }
-    }
-    if (isError) {
-        MessageBox::Show("Some of your paths are incvalid.", "Warning", MessageBoxButtons::OK, MessageBoxIcon::Warning);
     }
     std::cout << "Response from server: " << buffer << std::endl;
 
