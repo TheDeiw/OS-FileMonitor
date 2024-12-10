@@ -1,5 +1,6 @@
 #include <winsock2.h>
 #include <windows.h>
+#include <chrono>
 #include <iostream>
 #include <string>
 #include <iomanip>
@@ -18,15 +19,29 @@ static std::vector<std::array<std::string, 3>> cacheTable;
 
 // Function to get creation data of file
 std::string GetFileCreationTime(const std::wstring& filePath) {
-    HANDLE fileHandle = CreateFile(
-        filePath.c_str(),
-        GENERIC_READ,
-        FILE_SHARE_READ,
-        nullptr,
-        OPEN_EXISTING,
-        FILE_ATTRIBUTE_NORMAL,
-        nullptr
-    );
+    HANDLE fileHandle;
+
+    try {                                                       //В РАЗІ ЧОГО TRY CATCH ЗАБРАТИ
+        fileHandle = CreateFile(
+            filePath.c_str(),
+            GENERIC_READ,
+            FILE_SHARE_READ,
+            nullptr,
+            OPEN_EXISTING,
+            FILE_ATTRIBUTE_NORMAL,
+            nullptr
+        );
+    }
+    catch (...)
+    {
+        MessageBox(
+            NULL,                           // Вікно-власник (NULL для відсутності)
+            L"Текст повідомлення",         // Текст у вікні
+            L"Заголовок вікна",            // Заголовок
+            MB_OK | MB_ICONINFORMATION     // Тип кнопок і значок
+        );
+
+    }
 
     if (fileHandle == INVALID_HANDLE_VALUE) {
         return "Unknown";
@@ -126,16 +141,15 @@ std::string trimToLength(const std::string& str, size_t maxLength) {
     std::string result;
     for (char c : str) {
         if (c == '\n') {
-            continue; // Пропустити символ нового рядка
+            continue; 
         }
         result += c;
         if (result.size() >= maxLength) {
-            break; // При досягненні maxLength завершуємо
+            break; 
         }
     }
     return result;
 }
-
 
 void printCacheTable() {
     size_t columnWidth = 70;
@@ -143,12 +157,22 @@ void printCacheTable() {
     size_t totalWidth = columnWidth * 2 + timeWidth + 7;
 
     while (true) {
-        // Очищення консолі
+       
 #ifdef _WIN32
         system("cls");
 #else
         system("clear");
 #endif
+
+        auto now = std::chrono::steady_clock::now();
+        cacheTable.erase(std::remove_if(cacheTable.begin(), cacheTable.end(),
+            [now](std::array<std::string, 3>& row) {
+                int elapsedTime = std::stoi(row[2]);
+                elapsedTime += 1;
+                row[2] = std::to_string(elapsedTime);
+
+                return elapsedTime >= 5;
+            }), cacheTable.end());
 
         std::cout << std::string(totalWidth + 3, '-') << std::endl;
 
@@ -178,7 +202,13 @@ void printCacheTable() {
 
 
 
-int main() {
+int main() 
+{
+    // TEMP Setting UTF-8
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+
+
     WSADATA wsa;
     SOCKET serverSocket, clientSocket;
     sockaddr_in serverAddr, clientAddr;
