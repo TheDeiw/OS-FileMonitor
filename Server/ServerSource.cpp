@@ -8,7 +8,7 @@
 #include <map>
 #include <chrono>
 #include <thread>
-
+#include <system_error>
 
 #pragma comment(lib, "ws2_32.lib")
 namespace fs = std::filesystem;
@@ -31,18 +31,18 @@ std::string GetFileCreationTime(const std::wstring& filePath) {
 
     FILE_BASIC_INFO fileInfo;
     if (GetFileInformationByHandleEx(fileHandle, FileBasicInfo, &fileInfo, sizeof(fileInfo))) {
-        // Перетворення CreationTime в FILETIME
+        // Transforming CreationTime в FILETIME
         FILETIME fileTime;
         fileTime.dwLowDateTime = fileInfo.CreationTime.LowPart;
         fileTime.dwHighDateTime = fileInfo.CreationTime.HighPart;
 
-        // Перетворення FILETIME в SYSTEMTIME
+        // Transforming FILETIME в SYSTEMTIME
         SYSTEMTIME creationTime;
         FileTimeToSystemTime(&fileTime, &creationTime);
 
         CloseHandle(fileHandle);
 
-        // Форматування дати
+        // Data formating
         char buffer[20];
         sprintf_s(buffer, "%04d-%02d-%02d %02d:%02d:%02d",
             creationTime.wYear,
@@ -76,28 +76,46 @@ std::string searchFiles(const std::vector<std::string>& directories, const std::
 
     // Search in each directory
     for (const auto& dir : directories) {
-        result << dir << "| | \n";
-        // Make file iterator
-        for (const auto& entry : fs::directory_iterator(dir)) {
-
-            // Check for being a file
-            if (entry.is_regular_file()) {
-                auto ext = entry.path().extension().string();
-                ext = ext.substr(1); //remove the dot before the expansion
-
-                // Searching
-                if (std::find(extensions.begin(), extensions.end(), ext) != extensions.end()) {
-
-                    std::wstring wFilePath = entry.path().wstring();
-                    std::string creationTime = GetFileCreationTime(wFilePath);
-
-                    result << entry.path().filename().string() << "|"
-                        << fs::file_size(entry.path()) / 1024 << "|" << creationTime << "\n";
-                }
+        
+        if (fs::exists(dir)) {
+            if (fs::is_directory(dir)) {
+                result << "OK" << dir << "| | \n";
             }
         }
-    }
+        else {
+            result << "ER" << dir << "| | \n";
+        }
+        bool isEmpty = true;
 
+        try {
+            // Make file iterator
+            for (const auto& entry : fs::directory_iterator(dir)) {
+
+                // Check for being a file
+                if (entry.is_regular_file()) {
+                    auto ext = entry.path().extension().string();
+                    ext = ext.substr(1); //remove the dot before the expansion
+
+                    // Searching
+                    if (extensions.empty() || std::find(extensions.begin(), extensions.end(), ext) != extensions.end()) {
+
+                        std::wstring wFilePath = entry.path().wstring();
+                        std::string creationTime = GetFileCreationTime(wFilePath);
+
+                        result << entry.path().filename().string() << "|"
+                            << fs::file_size(entry.path()) / 1024 << " kb|" << creationTime << "\n";
+                        isEmpty = false;
+                    }
+                }
+            }
+            if (isEmpty) {
+                result << "-|-|- \n";
+            }
+        }
+        catch (const fs::filesystem_error& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+    }
     return result.str();
 }
 
@@ -150,6 +168,18 @@ int main() {
 
             // Send result
             send(clientSocket, searchResult.c_str(), searchResult.size(), 0);
+        }
+        else if (parts.size() == 1) {
+
+            auto directories = split(parts[0], '|');
+            std::vector<std::string> extensions = {};
+
+            // Search files
+            std::string searchResult = searchFiles(directories, extensions);
+
+            // Send result
+            send(clientSocket, searchResult.c_str(), searchResult.size(), 0);
+        
         }
 
         // Close clint socket
