@@ -138,23 +138,15 @@ System::Void Client::ClientForm::showButton_Click(System::Object^ sender, System
 
     // Getting a response
     recv(clientSocket, buffer, sizeof(buffer), 0);
-    
-    /*
-    while (buffer[0] == '1') {
-        std::string response(buffer);
-        response = response.substr(1);
-        System::String^ responseMessage = gcnew System::String(response.c_str());
-
-        MessageBox::Show(responseMessage, "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
-        recv(clientSocket, buffer, sizeof(buffer), 0);
-    }*/
 
     System::String^ responseMessage = gcnew System::String("");
 
     while (buffer[0] == '1') {
         std::string response(buffer);
         response = response.substr(1);
+        responseMessage += "\n";
         responseMessage += gcnew System::String(response.c_str());
+        responseMessage += "\n";
         recv(clientSocket, buffer, sizeof(buffer), 0);
     }
     if (responseMessage != "") { // Only show the message if there was at least one '1'

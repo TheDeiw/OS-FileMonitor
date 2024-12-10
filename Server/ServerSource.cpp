@@ -86,7 +86,7 @@ std::vector<std::string> split(const std::string& str, char delimiter) {
 // Function to search for files
 std::string searchFiles(const std::vector<std::string>& directories, const std::vector<std::string>& extensions, SOCKET clientSocket) {
     std::ostringstream result;
-
+    result << "0";
     // Search in each directory
     for (const auto& dir : directories) {
         
@@ -136,6 +136,11 @@ std::string searchFiles(const std::vector<std::string>& directories, const std::
         {
            // std::cerr << "Error: " << e.what() << std::endl;
             std::string errorMessage = "1Error! Invalid directory path: ";
+            errorMessage += e.what();
+            send(clientSocket, errorMessage.c_str(), errorMessage.size(), 0);
+        }
+        catch (std::exception e) {
+            std::string errorMessage = "1Error! Invalid directory: ";
             errorMessage += e.what();
             send(clientSocket, errorMessage.c_str(), errorMessage.size(), 0);
         }
