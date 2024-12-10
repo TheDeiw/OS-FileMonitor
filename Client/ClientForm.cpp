@@ -102,7 +102,12 @@ System::Void Client::ClientForm::showButton_Click(System::Object^ sender, System
     serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
     // Connecting to the server
-    connect(clientSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
+    if (connect(clientSocket, (sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
+        MessageBox::Show("Failed to connect to the server. Please ensure the server is running.", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+        closesocket(clientSocket);
+        WSACleanup();
+        return;
+    }
 
     // Forming a request
 
