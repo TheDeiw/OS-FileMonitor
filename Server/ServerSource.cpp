@@ -89,7 +89,7 @@ std::vector<std::string> split(const std::string& str, char delimiter) {
 }
 
 // Function to search for files
-std::string searchFiles(const std::vector<std::string>& directories, const std::vector<std::string>& extensions) {
+std::string searchFiles(const std::vector<std::string>& directories, const std::vector<std::string>& extensions, SOCKET clientSocket) {
     std::ostringstream result;
 
     // Search in each directory
@@ -130,8 +130,12 @@ std::string searchFiles(const std::vector<std::string>& directories, const std::
                 result << "-|-|- \n";
             }
         }
-        catch (const fs::filesystem_error& e) {
-            std::cerr << "Error: " << e.what() << std::endl;
+        catch (const fs::filesystem_error& e) 
+        {
+           // std::cerr << "Error: " << e.what() << std::endl;
+            std::string errorMessage = "Error! Invalid directory path: ";
+            errorMessage += e.what();
+            send(clientSocket, errorMessage.c_str(), errorMessage.size(), 0);
         }
     }
     return result.str();
@@ -271,7 +275,7 @@ int main()
             auto extensions = split(parts[1], ',');
 
             // Search files
-            std::string searchResult = searchFiles(directories, extensions);
+            std::string searchResult = searchFiles(directories, extensions, clientSocket);
 
             // Send result
             send(clientSocket, searchResult.c_str(), searchResult.size(), 0);
@@ -284,7 +288,7 @@ int main()
             std::vector<std::string> extensions = {};
 
             // Search files
-            std::string searchResult = searchFiles(directories, extensions);
+            std::string searchResult = searchFiles(directories, extensions, clientSocket);
 
             // Send result
             send(clientSocket, searchResult.c_str(), searchResult.size(), 0);
