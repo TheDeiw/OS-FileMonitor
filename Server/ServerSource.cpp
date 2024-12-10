@@ -18,7 +18,7 @@ namespace fs = std::filesystem;
 static std::vector<std::array<std::string, 3>> cacheTable;
 
 // Function to get creation data of file
-std::string GetFileCreationTime(const std::wstring& filePath) {
+std::string GetFileCreationTime(const std::wstring& filePath, SOCKET clientSocket) {
     HANDLE fileHandle;
 
     try {                                                       //В РАЗІ ЧОГО TRY CATCH ЗАБРАТИ
@@ -32,15 +32,10 @@ std::string GetFileCreationTime(const std::wstring& filePath) {
             nullptr
         );
     }
-    catch (...)
-    {
-        MessageBox(
-            NULL,                           // Вікно-власник (NULL для відсутності)
-            L"Текст повідомлення",         // Текст у вікні
-            L"Заголовок вікна",            // Заголовок
-            MB_OK | MB_ICONINFORMATION     // Тип кнопок і значок
-        );
-
+    catch (std::exception e) {
+        std::string errorMessage = "1Error! Cannot open the file to check its data: ";
+        errorMessage += e.what();
+        send(clientSocket, errorMessage.c_str(), errorMessage.size(), 0);
     }
 
     if (fileHandle == INVALID_HANDLE_VALUE) {
@@ -115,15 +110,22 @@ std::string searchFiles(const std::vector<std::string>& directories, const std::
                     ext = ext.substr(1); //remove the dot before the expansion
 
                     // Searching
-                    if (extensions.empty() || std::find(extensions.begin(), extensions.end(), ext) != extensions.end()) {
+                    try {
+                        if (extensions.empty() || std::find(extensions.begin(), extensions.end(), ext) != extensions.end()) {
 
-                        std::wstring wFilePath = entry.path().wstring();
-                        std::string creationTime = GetFileCreationTime(wFilePath);
+                            std::wstring wFilePath = entry.path().wstring();
+                            std::string creationTime = GetFileCreationTime(wFilePath, clientSocket);
 
-                        result << entry.path().filename().string() << "|"
-                            << fs::file_size(entry.path()) / 1024 << " kb|" << creationTime << "\n";
-                        isEmpty = false;
+                            result << entry.path().filename().string() << "|"
+                                << fs::file_size(entry.path()) / 1024 << " kb|" << creationTime << "\n";
+                            isEmpty = false;
+                        }
                     }
+                    catch (std::exception e) {
+                        std::string errorMessage = "1Error! Uncorrect file name: ";
+                        errorMessage += e.what();
+                        send(clientSocket, errorMessage.c_str(), errorMessage.size(), 0);
+                    }               
                 }
             }
             if (isEmpty) {
@@ -133,7 +135,7 @@ std::string searchFiles(const std::vector<std::string>& directories, const std::
         catch (const fs::filesystem_error& e) 
         {
            // std::cerr << "Error: " << e.what() << std::endl;
-            std::string errorMessage = "Error! Invalid directory path: ";
+            std::string errorMessage = "1Error! Invalid directory path: ";
             errorMessage += e.what();
             send(clientSocket, errorMessage.c_str(), errorMessage.size(), 0);
         }
@@ -257,7 +259,7 @@ int main()
         for (const auto& bufferRequest : cacheTable) {
             if (bufferRequest[0] == request) {
                 std::string searchResult = bufferRequest[1];
-                std::cout << "\n YEEEEEY \n";
+                //std::cout << "\n YEEEEEY \n";
                 send(clientSocket, searchResult.c_str(), searchResult.size(), 0);
                 closesocket(clientSocket);
                 isContinue = true;
