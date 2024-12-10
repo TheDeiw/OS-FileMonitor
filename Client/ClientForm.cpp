@@ -165,7 +165,7 @@ System::Void Client::ClientForm::showButton_Click(System::Object^ sender, System
             {
                 fileTable->Rows->Add(
                     gcnew System::String(fields[0].c_str()),
-                    gcnew System::String((fields[1] + " kb").c_str()),
+                    gcnew System::String(fields[1].c_str()),
                     gcnew System::String(fields[2].c_str())
                 );
             }
