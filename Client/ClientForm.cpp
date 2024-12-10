@@ -88,7 +88,7 @@ System::Void Client::ClientForm::showButton_Click(System::Object^ sender, System
     WSADATA wsa;
     SOCKET clientSocket;
     sockaddr_in serverAddr;
-    char buffer[4096] = { 0 };
+    char buffer[10000] = { 0 };
 
     // Winsock initialization
     WSAStartup(MAKEWORD(2, 2), &wsa);

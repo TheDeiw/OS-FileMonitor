@@ -2,7 +2,9 @@
 #include <windows.h>
 #include <iostream>
 #include <string>
+#include <iomanip>
 #include <vector>
+#include <array>
 #include <sstream>
 #include <filesystem>
 #include <map>
@@ -12,6 +14,7 @@
 
 #pragma comment(lib, "ws2_32.lib")
 namespace fs = std::filesystem;
+static std::vector<std::array<std::string, 3>> cacheTable;
 
 // Function to get creation data of file
 std::string GetFileCreationTime(const std::wstring& filePath) {
@@ -119,14 +122,69 @@ std::string searchFiles(const std::vector<std::string>& directories, const std::
     return result.str();
 }
 
+std::string trimToLength(const std::string& str, size_t maxLength) {
+    std::string result;
+    for (char c : str) {
+        if (c == '\n') {
+            continue; // Пропустити символ нового рядка
+        }
+        result += c;
+        if (result.size() >= maxLength) {
+            break; // При досягненні maxLength завершуємо
+        }
+    }
+    return result;
+}
+
+
+void printCacheTable() {
+    size_t columnWidth = 70;
+    size_t timeWidth = 6;
+    size_t totalWidth = columnWidth * 2 + timeWidth + 7;
+
+    while (true) {
+        // Очищення консолі
+#ifdef _WIN32
+        system("cls");
+#else
+        system("clear");
+#endif
+
+        std::cout << std::string(totalWidth + 3, '-') << std::endl;
+
+        std::cout << "| "
+            << std::setw(columnWidth) << std::left << "Client's request"
+            << " | "
+            << std::setw(columnWidth) << std::left << "Server's respond"
+            << " | "
+            << std::setw(timeWidth) << std::right << "Time"
+            << " |" << std::endl;
+
+        std::cout << std::string(totalWidth + 3, '-') << std::endl;
+
+        for (const auto& row : cacheTable) {
+            std::cout << "| "
+                << std::setw(columnWidth) << std::left << trimToLength(row[0], columnWidth) << " | "
+                << std::setw(columnWidth) << std::left << trimToLength(row[1], columnWidth) << " | "
+                << std::setw(timeWidth) << std::right << row[2] << " |"
+                << std::endl;
+        }
+
+        std::cout << std::string(totalWidth + 3, '-') << std::endl;
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+}
+
+
+
 int main() {
     WSADATA wsa;
     SOCKET serverSocket, clientSocket;
     sockaddr_in serverAddr, clientAddr;
     int clientSize = sizeof(clientAddr);
     char buffer[4096] = { 0 };
-
-
+    
     // Initialize Winsock
     WSAStartup(MAKEWORD(2, 2), &wsa);
 
@@ -143,9 +201,12 @@ int main() {
     listen(serverSocket, 3);
 
     std::cout << "Server waits..." << std::endl;
+    std::thread textThread(printCacheTable);
 
     while (true) {
+        
         clientSocket = accept(serverSocket, (sockaddr*)&clientAddr, &clientSize);
+
         if (clientSocket == INVALID_SOCKET) {
             std::cerr << "Error connection!" << std::endl;
             continue;
@@ -156,6 +217,22 @@ int main() {
         recv(clientSocket, buffer, sizeof(buffer), 0);
         std::string request(buffer);
         std::cout << "Received request: " << request << std::endl;
+
+        bool isContinue = false;
+        // Buffer checking
+        for (const auto& bufferRequest : cacheTable) {
+            if (bufferRequest[0] == request) {
+                std::string searchResult = bufferRequest[1];
+                std::cout << "\n YEEEEEY \n";
+                send(clientSocket, searchResult.c_str(), searchResult.size(), 0);
+                closesocket(clientSocket);
+                isContinue = true;
+            }
+        }
+
+        if (isContinue) {
+            continue;
+        }
 
         // Request processing
         auto parts = split(request, ';');
@@ -168,6 +245,8 @@ int main() {
 
             // Send result
             send(clientSocket, searchResult.c_str(), searchResult.size(), 0);
+
+            cacheTable.push_back({ request, searchResult, "0"});
         }
         else if (parts.size() == 1) {
 
@@ -179,8 +258,9 @@ int main() {
 
             // Send result
             send(clientSocket, searchResult.c_str(), searchResult.size(), 0);
-        
-        }
+
+            cacheTable.push_back({ request, searchResult, "0"});
+        }   
 
         // Close clint socket
         closesocket(clientSocket);
