@@ -143,7 +143,7 @@ System::Void Client::ClientForm::showButton_Click(System::Object^ sender, System
 
     fileTable->Rows->Clear();
     int rowIndex;
-
+    bool isError = false;
     for (const auto& row : rows) {
         auto fields = split(row, '|');
         if (fields.size() == 3) {
@@ -153,13 +153,20 @@ System::Void Client::ClientForm::showButton_Click(System::Object^ sender, System
             if (fields[1] == " ")
             {
                 rowIndex = fileTable->Rows->Add(
-                    gcnew System::String(fields[0].c_str()),
+                    gcnew System::String(fields[0].substr(2).c_str()),
                     gcnew System::String(fields[1].c_str()),
                     gcnew System::String(fields[2].c_str())
                 );
 
-                fileTable->Rows[rowIndex]->DefaultCellStyle->Font = gcnew System::Drawing::Font(fileTable->Font, System::Drawing::FontStyle::Bold);
-                fileTable->Rows[rowIndex]->DefaultCellStyle->BackColor = System::Drawing::Color::LightBlue;
+                if (fields[0].substr(0, 2) == "OK") {
+                    fileTable->Rows[rowIndex]->DefaultCellStyle->Font = gcnew System::Drawing::Font(fileTable->Font, System::Drawing::FontStyle::Bold);
+                    fileTable->Rows[rowIndex]->DefaultCellStyle->BackColor = System::Drawing::Color::LightBlue;
+                }
+                else if (fields[0].substr(0, 2) == "ER") {
+                    fileTable->Rows[rowIndex]->DefaultCellStyle->Font = gcnew System::Drawing::Font(fileTable->Font, System::Drawing::FontStyle::Bold);
+                    fileTable->Rows[rowIndex]->DefaultCellStyle->BackColor = System::Drawing::Color::FromArgb(250, 160, 160);
+                    isError = true;
+                }
             }
             else
             {
@@ -170,6 +177,9 @@ System::Void Client::ClientForm::showButton_Click(System::Object^ sender, System
                 );
             }
         }
+    }
+    if (isError) {
+        MessageBox::Show("Some of your paths are incvalid.", "Warning", MessageBoxButtons::OK, MessageBoxIcon::Warning);
     }
     std::cout << "Response from server: " << buffer << std::endl;
 
